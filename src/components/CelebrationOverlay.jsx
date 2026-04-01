@@ -33,7 +33,7 @@ const CELEBRATION_CONFIG = {
   },
   love: {
     balloonCount: 16,
-    headline: "I love you moreee, mi amoor",
+    headline: "Manifesting our friendship for ever , mi amoor",
     subline: "With all of me — always.",
     banners: [
       "I love you moreee",

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { useMemoriesManifest } from "../hooks/useMemoriesManifest";
 import { RippleButton } from "./RippleButton";
 
@@ -74,6 +75,17 @@ export function MemoryCollage({ open, onOpen, onClose }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
+  /** Portal to body + lock scroll — parent motion.div uses filter/transform which breaks `position:fixed`. */
+  useEffect(() => {
+    if (!open) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [open]);
+
   const visibleItems = urls.slice(0, visibleCount);
 
   return (
@@ -83,20 +95,23 @@ export function MemoryCollage({ open, onOpen, onClose }) {
           onClick={onOpen}
           className="rounded-full bg-gradient-to-r from-love via-love to-blush px-10 py-4 font-sans text-base font-medium tracking-wide text-white shadow-glow"
         >
-          Open Our Memories ❤️
+          Open Your Memories ❤️
         </RippleButton>
       </div>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className="fixed inset-0 z-[90] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#1a0510] via-love/30 to-[#0f0208]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            role="presentation"
-          >
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                className="fixed left-0 top-0 z-[90] flex h-[100dvh] min-h-0 w-full max-w-none flex-col items-center justify-center overflow-x-hidden overflow-y-auto bg-gradient-to-b from-[#1a0510] via-love/30 to-[#0f0208]"
+                style={{ position: "fixed", width: "100vw", margin: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6 }}
+                role="presentation"
+              >
             {/* Ambient glow orbs */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
               <motion.div
@@ -274,9 +289,11 @@ export function MemoryCollage({ open, onOpen, onClose }) {
                 </AnimatePresence>
               </>
             )}
-          </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </>
   );
 }

@@ -1,8 +1,24 @@
 {
-  "generatedAt": "2026-04-01T17:42:30.122Z",
+  "generatedAt": "2026-04-01T17:55:18.073Z",
   "items": [
     {
       "file": "image1.png",
+      "kind": "image"
+    },
+    {
+      "file": "image10.png",
+      "kind": "image"
+    },
+    {
+      "file": "image11.png",
+      "kind": "image"
+    },
+    {
+      "file": "image12.png",
+      "kind": "image"
+    },
+    {
+      "file": "image13.png",
       "kind": "image"
     },
     {
@@ -23,6 +39,14 @@
     },
     {
       "file": "image6.png",
+      "kind": "image"
+    },
+    {
+      "file": "image7.png",
+      "kind": "image"
+    },
+    {
+      "file": "image8.png",
       "kind": "image"
     }
   ]
