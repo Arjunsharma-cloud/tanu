@@ -90,8 +90,24 @@ export function LovePostcard({ mouse }) {
               {/* Envelope */}
               <div className="relative mx-auto w-full" style={{ transformStyle: "preserve-3d" }}>
                 <motion.div
-                  className="relative h-56 w-full rounded-xl border border-love/20 bg-gradient-to-b from-love/15 to-blush/30 shadow-md md:h-64"
+                  className={`relative h-56 w-full rounded-xl border border-love/20 bg-gradient-to-b from-love/15 to-blush/30 shadow-md md:h-64 ${
+                    phase === "sealed" ? "cursor-pointer" : ""
+                  }`}
                   initial={false}
+                  role={phase === "sealed" ? "button" : undefined}
+                  tabIndex={phase === "sealed" ? 0 : undefined}
+                  aria-label={phase === "sealed" ? "Open the envelope" : undefined}
+                  onClick={() => {
+                    if (phase === "sealed") setPhase("opened");
+                  }}
+                  onKeyDown={(e) => {
+                    if (phase !== "sealed") return;
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setPhase("opened");
+                    }
+                  }}
+                  whileTap={phase === "sealed" ? { scale: 0.985 } : undefined}
                   animate={{
                     opacity: phase === "revealed" ? 0.45 : 1,
                     boxShadow:
@@ -102,25 +118,24 @@ export function LovePostcard({ mouse }) {
                 >
                   {/* flap */}
                   <motion.div
-                    className="absolute left-0 right-0 top-0 z-20 h-28 origin-top rounded-b-3xl border border-love/15 bg-gradient-to-b from-love/40 to-blush/50"
+                    className="pointer-events-none absolute left-0 right-0 top-0 z-20 h-28 origin-top rounded-b-3xl border border-love/15 bg-gradient-to-b from-love/40 to-blush/50"
                     style={{ transformStyle: "preserve-3d" }}
                     animate={{ rotateX: phase === "sealed" ? 0 : -125 }}
                     transition={{ type: "spring", stiffness: 70, damping: 16 }}
                   />
-                  <div className="absolute bottom-0 left-0 right-0 top-0 z-10 flex flex-col items-center justify-center px-4">
+                  <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 z-10 flex flex-col items-center justify-center px-4">
                     {phase === "sealed" && (
-                      <RippleButton
-                        onClick={() => setPhase("opened")}
-                        className="rounded-full bg-gradient-to-r from-love to-love/80 px-8 py-3 font-sans text-sm font-medium tracking-wide text-white shadow-lg"
-                      >
+                      <span className="rounded-full bg-gradient-to-r from-love to-love/80 px-8 py-3 font-sans text-sm font-medium tracking-wide text-white shadow-lg">
                         Open the envelope
-                      </RippleButton>
+                      </span>
                     )}
                   </div>
 
                   {/* letter sliding out — full width inset so text is never clipped */}
                   <motion.div
-                    className="absolute left-3 right-3 top-8 z-30 mx-auto w-auto max-w-none rounded-xl border border-white/60 bg-white/95 shadow-xl sm:left-4 sm:right-4"
+                    className={`absolute left-3 right-3 top-8 z-30 mx-auto w-auto max-w-none rounded-xl border border-white/60 bg-white/95 shadow-xl sm:left-4 sm:right-4 ${
+                      phase === "sealed" ? "pointer-events-none" : "pointer-events-auto"
+                    }`}
                     initial={false}
                     animate={{
                       y: phase === "sealed" ? 80 : phase === "opened" ? 8 : 8,

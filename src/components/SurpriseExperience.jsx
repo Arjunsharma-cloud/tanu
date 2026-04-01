@@ -19,8 +19,8 @@ export function SurpriseExperience({ mouse }) {
   return (
     <motion.div
       className="relative min-h-screen"
-      initial={{ opacity: 0, filter: "blur(12px)" }}
-      animate={{ opacity: 1, filter: "blur(0px)" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
     >
       <UnlockBurst />

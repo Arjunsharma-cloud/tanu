@@ -12,7 +12,7 @@ const MESSAGE_DELAY_MS = 2800;
 const START_DELAY_MS = 500;
 
 const FINAL_LINES = [
-  "I love you more than you know",
+  "Manifesting our friendship for ever",
   "MI AMMOOORRRR",
 ];
 

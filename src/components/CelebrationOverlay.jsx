@@ -1,6 +1,7 @@
 import confetti from "canvas-confetti";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo } from "react";
+import { createPortal } from "react-dom";
 
 const BALLOON_COLORS = ["#FFC0CB", "#FF4D6D", "#FFB7C5", "#FF8FA3", "#FFD6E0"];
 
@@ -8,14 +9,13 @@ const BALLOON_COLORS = ["#FFC0CB", "#FF4D6D", "#FFB7C5", "#FF8FA3", "#FFD6E0"];
 const CELEBRATION_CONFIG = {
   celebrate: {
     balloonCount: 34,
-    /** Hero line — Celebrate Her */
-    headline: "Enjoy your day, love",
+    headline: "Enjoy your day, DONN",
     subline: "You deserve every soft, shining moment.",
     banners: [
       "Enjoy your day, love",
       "Happy Birthday, beautiful",
       "You light up my whole world",
-      "Celebrating you today & always",
+      
     ],
     floatingWords: ["Enjoy", "your", "day", "love", "❤️", "DONNN"],
   },
@@ -27,7 +27,7 @@ const CELEBRATION_CONFIG = {
       "May your wish come true",
       "Every star is listening tonight",
       "Your dreams matter",
-      "I believe in your magic",
+      
     ],
     floatingWords: ["Wish", "true", "hope", "forever", "✨"],
   },
@@ -39,7 +39,7 @@ const CELEBRATION_CONFIG = {
       "I love you moreee",
       "Mi amoor",
       "You are my home",
-      "More every heartbeat",
+      
     ],
     floatingWords: ["Te amo", "moreee", "mi amoor", "DONNN", "💌"],
   },
@@ -59,7 +59,7 @@ function fireConfetti(kind) {
 }
 
 /**
- * Full-screen layered celebration: balloons, hearts, banners, floating text — varies by mode.
+ * Full-screen layered celebration: balloons, hearts, banners, floating text — portaled to viewport center.
  * @param {{ active: string | null, onClose: () => void }} props
  */
 export function CelebrationOverlay({ active, onClose }) {
@@ -70,132 +70,154 @@ export function CelebrationOverlay({ active, onClose }) {
     fireConfetti(active);
   }, [active]);
 
+  useEffect(() => {
+    if (!active) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [active]);
+
   const balloonCount = cfg?.balloonCount ?? 14;
 
-  return (
-    <AnimatePresence>
+  const overlay = (
+    <AnimatePresence mode="wait">
       {active && cfg && (
         <motion.div
-          className="fixed inset-0 z-[80] flex cursor-pointer flex-col items-center justify-center bg-love/10 backdrop-blur-[2px]"
+          key="celebration-overlay"
+          className="fixed inset-0 z-[9999] isolate flex cursor-pointer flex-col bg-gradient-to-b from-[#fff8fa]/97 via-[#ffe4ec]/95 to-[#fff5f8]/97 backdrop-blur-md"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100vw",
+            margin: 0,
+            maxWidth: "100vw",
+            minHeight: "100dvh",
+          }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.45 }}
+          transition={{ duration: 0.4 }}
           onClick={onClose}
           role="presentation"
         >
-          <motion.div
-            className="pointer-events-none absolute inset-0 overflow-hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {/* Balloons — count from config (many more for "celebrate") */}
-            {Array.from({ length: balloonCount }).map((_, i) => (
-              <motion.div
-                key={`b-${active}-${i}`}
-                className="absolute bottom-0 -ml-8 flex flex-col items-center"
-                style={{
-                  left: balloonCount === 1 ? "50%" : `${(i / (balloonCount - 1)) * 100}%`,
-                }}
-                initial={{ y: "110vh", opacity: 0.9 }}
-                animate={{ y: "-20vh", x: [0, (i % 2 === 0 ? 1 : -1) * 20, 0] }}
-                transition={{
-                  duration: 10 + (i % 5),
-                  delay: i * 0.1,
-                  ease: [0.22, 0.61, 0.36, 1],
-                  repeat: Infinity,
-                  repeatDelay: 2,
-                }}
-              >
-                <div
-                  className="h-24 w-16 rounded-[50%] shadow-lg md:h-[5.5rem] md:w-[4.25rem]"
+          {/* Effects layer — fills viewport; does not affect flex centering */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <motion.div
+              className="pointer-events-none absolute inset-0 overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {Array.from({ length: balloonCount }).map((_, i) => (
+                <motion.div
+                  key={`b-${active}-${i}`}
+                  className="absolute bottom-0 -ml-8 flex flex-col items-center"
                   style={{
-                    background: `linear-gradient(145deg, ${BALLOON_COLORS[i % BALLOON_COLORS.length]}, #fff5)`,
+                    left: balloonCount === 1 ? "50%" : `${(i / (balloonCount - 1)) * 100}%`,
                   }}
-                />
-                <div className="h-16 w-px bg-love/40" />
-              </motion.div>
-            ))}
+                  initial={{ y: "110vh", opacity: 0.9 }}
+                  animate={{ y: "-20vh", x: [0, (i % 2 === 0 ? 1 : -1) * 20, 0] }}
+                  transition={{
+                    duration: 10 + (i % 5),
+                    delay: i * 0.1,
+                    ease: [0.22, 0.61, 0.36, 1],
+                    repeat: Infinity,
+                    repeatDelay: 2,
+                  }}
+                >
+                  <div
+                    className="h-24 w-16 rounded-[50%] shadow-lg md:h-[5.5rem] md:w-[4.25rem]"
+                    style={{
+                      background: `linear-gradient(145deg, ${BALLOON_COLORS[i % BALLOON_COLORS.length]}, #fff5)`,
+                    }}
+                  />
+                  <div className="h-16 w-px bg-love/40" />
+                </motion.div>
+              ))}
 
-            {/* Heart particles */}
-            {Array.from({ length: 24 }).map((_, i) => (
-              <motion.span
-                key={`h-${active}-${i}`}
-                className="absolute text-3xl text-love/70"
-                style={{ left: `${(i * 17) % 100}%`, top: `${(i * 23) % 80}%` }}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{
-                  scale: [0, 1.2, 1],
-                  y: [0, -40, -120],
-                  x: [(i % 2 === 0 ? 1 : -1) * 60, 0],
-                  opacity: [0, 1, 0],
-                  rotate: [0, 25],
-                }}
-                transition={{
-                  duration: 3.2,
-                  delay: i * 0.08,
-                  repeat: Infinity,
-                  repeatDelay: 1.5,
-                  ease: "easeOut",
-                }}
-              >
-                ♥
-              </motion.span>
-            ))}
+              {Array.from({ length: 24 }).map((_, i) => (
+                <motion.span
+                  key={`h-${active}-${i}`}
+                  className="absolute text-3xl text-love/70"
+                  style={{ left: `${(i * 17) % 100}%`, top: `${(i * 23) % 80}%` }}
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{
+                    scale: [0, 1.2, 1],
+                    y: [0, -40, -120],
+                    x: [(i % 2 === 0 ? 1 : -1) * 60, 0],
+                    opacity: [0, 1, 0],
+                    rotate: [0, 25],
+                  }}
+                  transition={{
+                    duration: 3.2,
+                    delay: i * 0.08,
+                    repeat: Infinity,
+                    repeatDelay: 1.5,
+                    ease: "easeOut",
+                  }}
+                >
+                  ♥
+                </motion.span>
+              ))}
 
-            {/* Banners — mode-specific */}
-            {cfg.banners.map((text, i) => (
-              <motion.div
-                key={`${active}-banner-${i}`}
-                className="absolute left-0 right-0 mx-auto w-fit max-w-[90vw] rounded-full border border-white/50 bg-white/80 px-5 py-2 text-center font-sans text-xs text-love shadow-lg backdrop-blur-md sm:px-6 sm:text-sm"
-                style={{ top: `${14 + i * 11}%` }}
-                initial={{ opacity: 0, y: -30, scale: 0.9 }}
-                animate={{ opacity: 1, y: [0, 6, 0], scale: 1 }}
-                transition={{
-                  delay: 0.15 + i * 0.1,
-                  y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-                }}
-              >
-                {text}
-              </motion.div>
-            ))}
+              {cfg.banners.map((text, i) => (
+                <motion.div
+                  key={`${active}-banner-${i}`}
+                  className="absolute left-0 right-0 mx-auto w-fit max-w-[90vw] rounded-full border border-white/50 bg-white/80 px-5 py-2 text-center font-sans text-xs text-love shadow-lg backdrop-blur-md sm:px-6 sm:text-sm"
+                  style={{ top: `${14 + i * 11}%` }}
+                  initial={{ opacity: 0, y: -30, scale: 0.9 }}
+                  animate={{ opacity: 1, y: [0, 6, 0], scale: 1 }}
+                  transition={{
+                    delay: 0.15 + i * 0.1,
+                    y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                  }}
+                >
+                  {text}
+                </motion.div>
+              ))}
 
-            {/* Floating display words — mode-specific */}
-            {cfg.floatingWords.map((word, i) => (
-              <motion.span
-                key={`${active}-float-${i}`}
-                className="absolute font-display text-3xl text-love/40 md:text-6xl"
-                style={{
-                  left: `${8 + (i * 17) % 84}%`,
-                  top: `${28 + (i * 13) % 38}%`,
-                }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{
-                  opacity: [0.25, 0.6, 0.25],
-                  y: [0, -20, 0],
-                  rotate: [-3, 3, -3],
-                }}
-                transition={{ duration: 5 + i * 0.3, repeat: Infinity, ease: "easeInOut" }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </motion.div>
+              {cfg.floatingWords.map((word, i) => (
+                <motion.span
+                  key={`${active}-float-${i}`}
+                  className="absolute font-display text-3xl text-love/40 md:text-6xl"
+                  style={{
+                    left: `${8 + (i * 17) % 84}%`,
+                    top: `${28 + (i * 13) % 38}%`,
+                  }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{
+                    opacity: [0.25, 0.6, 0.25],
+                    y: [0, -20, 0],
+                    rotate: [-3, 3, -3],
+                  }}
+                  transition={{ duration: 5 + i * 0.3, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </motion.div>
+          </div>
 
-          {/* Center hero message */}
-          <motion.div
-            className="pointer-events-none relative z-10 mx-auto max-w-lg px-6 text-center"
-            initial={{ opacity: 0, y: 16, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ type: "spring", stiffness: 120, damping: 18, delay: 0.12 }}
-          >
-            <p className="font-display text-4xl leading-tight text-love drop-shadow-sm md:text-6xl">{cfg.headline}</p>
-            <p className="mt-4 font-body text-lg italic text-love/85 md:text-xl">{cfg.subline}</p>
-          </motion.div>
+          {/* Center block: true viewport center (flex-1 + justify-center) */}
+          <div className="pointer-events-none relative z-10 flex min-h-0 w-full flex-1 flex-col items-center justify-center px-6 py-16">
+            <motion.div
+              className="mx-auto max-w-lg text-center"
+              initial={{ opacity: 0, y: 24, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ type: "spring", stiffness: 120, damping: 18, delay: 0.08 }}
+            >
+              <p className="font-display text-4xl leading-tight text-love drop-shadow-sm md:text-6xl">{cfg.headline}</p>
+              <p className="mt-4 font-body text-lg italic text-love/90 md:text-xl">{cfg.subline}</p>
+            </motion.div>
+          </div>
 
           <motion.p
-            className="pointer-events-none relative z-10 mt-auto mb-10 max-w-xs text-center font-body text-sm text-love/90 md:mb-16"
+            className="pointer-events-none absolute bottom-8 left-0 right-0 z-10 mx-auto max-w-xs text-center font-body text-sm text-love/90"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.35 }}
@@ -206,4 +228,8 @@ export function CelebrationOverlay({ active, onClose }) {
       )}
     </AnimatePresence>
   );
+
+  if (typeof document === "undefined") return null;
+
+  return createPortal(overlay, document.body);
 }
