@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-04-01T17:42:30.122Z",
+  "items": [
+    {
+      "file": "image1.png",
+      "kind": "image"
+    },
+    {
+      "file": "image2.png",
+      "kind": "image"
+    },
+    {
+      "file": "image3.png",
+      "kind": "image"
+    },
+    {
+      "file": "image4.png",
+      "kind": "image"
+    },
+    {
+      "file": "image5.png",
+      "kind": "image"
+    },
+    {
+      "file": "image6.png",
+      "kind": "image"
+    }
+  ]
+}
