@@ -59,7 +59,7 @@ export function CountdownView({ countdown }) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
       >
-        Until the clock strikes midnight on April 2nd — then this love story continues.
+        Until the clock strikes midnight on September 17nd — then this love story continues.
       </motion.p>
     </div>
   );
