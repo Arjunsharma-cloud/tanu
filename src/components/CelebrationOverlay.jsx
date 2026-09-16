@@ -17,7 +17,7 @@ const CELEBRATION_CONFIG = {
       "You light up my whole world",
       
     ],
-    floatingWords: ["Enjoy", "your", "day", "love", "❤️", "DONNN"],
+    floatingWords: ["Enjoy", "your", "day", "love", "❤️", "Babeeee"],
   },
   wish: {
     balloonCount: 18,
@@ -33,7 +33,7 @@ const CELEBRATION_CONFIG = {
   },
   love: {
     balloonCount: 16,
-    headline: "Manifesting our friendship for ever , mi amoor",
+    headline: "Manifesting our love forever , mi amoor",
     subline: "With all of me — always.",
     banners: [
       "I love you moreee",
@@ -41,7 +41,7 @@ const CELEBRATION_CONFIG = {
       "You are my home",
       
     ],
-    floatingWords: ["Te amo", "moreee", "mi amoor", "DONNN", "💌"],
+    floatingWords: ["Te amo", "moreee", "mi amoor", "Muskan", "💌"],
   },
 };
 

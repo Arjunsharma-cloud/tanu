@@ -11,7 +11,7 @@ const MESSAGE_DELAY_MS = 2800;
 /** First image delay after overlay opens (ms) */
 const START_DELAY_MS = 500;
 
-const FINAL_LINES = ["Manifesting our friendship for ever", "MI AMMOOORRRR"];
+const FINAL_LINES = ["Manifesting our lovee for ever", "MI AMMORR"];
 
 /**
  * Fullscreen memory journey: images pop in one by one; then a closing love message.
