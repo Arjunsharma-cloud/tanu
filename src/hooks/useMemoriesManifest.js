@@ -20,9 +20,11 @@ export function useMemoriesManifest() {
     error: null,
   });
 
-  useEffect(() => {
+  const fetchManifest = useCallback(() => {
     let cancelled = false;
     const url = `${prefix}memories/manifest.json`;
+    setState((prev) => ({ ...prev, loading: true, error: null }));
+
     fetch(url, { cache: "no-store" })
       .then((r) => {
         if (!r.ok) throw new Error("Could not load memories list.");
@@ -35,17 +37,26 @@ export function useMemoriesManifest() {
       })
       .catch((e) => {
         if (cancelled) return;
-        setState({ items: [], loading: false, error: e?.message ?? "Failed to load memories." });
+        setState({
+          items: [],
+          loading: false,
+          error: e?.message ?? "Failed to load memories.",
+        });
       });
+
     return () => {
       cancelled = true;
     };
   }, [prefix]);
 
+  useEffect(() => {
+    return fetchManifest();
+  }, [fetchManifest]);
+
   const assetUrl = useCallback(
     (file) => `${prefix}memories/${encodeURIComponent(file)}`,
-    [prefix]
+    [prefix],
   );
 
-  return { ...state, assetUrl };
+  return { ...state, assetUrl, refetch: fetchManifest };
 }

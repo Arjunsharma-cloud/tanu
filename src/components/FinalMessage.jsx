@@ -14,7 +14,7 @@ export function FinalMessage() {
     >
       <div className="mx-auto max-w-xl rounded-3xl border border-white/50 bg-white/40 px-8 py-12 shadow-glow backdrop-blur-md">
         <p className="font-display text-4xl leading-snug text-love md:text-5xl">
-          Happy Birthday, DONNN <span className="inline-block">❤️</span>
+          Happy Birthday, babee <span className="inline-block">❤️</span>
         </p>
         <p className="mt-6 font-body text-lg italic leading-relaxed text-love/90 md:text-xl">
           You mean more to me than words will ever be able to hold.

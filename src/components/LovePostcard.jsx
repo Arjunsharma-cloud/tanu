@@ -2,18 +2,19 @@ import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-mot
 import { useEffect, useState } from "react";
 import { RippleButton } from "./RippleButton";
 
-const MESSAGE = `DONNN,
+const MESSAGE = `Happy birthday tanuuuu😘…may god bless you.. aree aree sorry sorry yrr by mistake i have mentioned god 😁 ..maaf krdena na ..
 
-Before you, the world felt like noise — beautiful sometimes, but scattered. You walked in, and suddenly everything had a center.
 
-You changed how I notice mornings, how I hear music, how I hope. With you, luck stopped being a word and became a quiet fact I feel in my chest.
+Ek aur ehsaan samaj kr.. once again i am doing bkchodi only ..butt i like everything that i do when i am with you …i dont know how howww but how i fell for u .. how i started loving you because i never want to .. i was little bit afraid tooo ..but after that jibhi all the thing changed and after that all the things that happen are totally unexpected.. before i think that we will be in contact for short time butt see baby we are in contact from 22nd may and today it completes 15 month 26 day .. i think its a lot of time..i know in between there something something was not good between us but i think it is normal after that now i am totally sure about loving you .. i think i got the best of everything that i havent imagine or dream of 
 
-I promise to keep choosing you — in the small moments and the big ones — to listen deeper, love softer, and stand beside you as we build whatever beautiful comes next.
+..and dont even dare to say that i deserve better .. i have got the best girl .. hmm shyd pichle janam ki wajh s h y ..i know ki u dont want relation .. aree beta toh kya huaa ..tum ho vo hi bhot h .. i dont want anything else ..
 
-On your birthday, I wish you peace that settles deep, joy that surprises you, and the certainty that you are adored — not for what you do, but for who you are.
+I wanna be the guy you find peace , courage , happiness , purpose and and and veryyy hopefully a future with . And for that i am willing to wait as long as possible .... khi nhi jaa rha mai . Tum fas chuki ho mere sath 
 
-Forever yours,
-with everything I am.`;
+Thanks for everything babyy .. whenever i need suggestion for anything or samjhane k liye hamesha .. and that …forcing me tooo start concentrating on my career or what i want to doo..i know u dont want to celebrate your birthday but i really really want to celebrate it with u and i want to be with u at that day but sab thodi milta h 🥹😁..
+
+I dont know how more long we will be in touch but there will be no regret i have spend the best time of my life with the best .. and i will be missing u a lot today .. 
+and i know u dont like but i love u tanushikha bharti .. and happy happy birthday babbyyyyyyy (muskan )🤎❤️`;
 
 /**
  * Animated envelope + flipping postcard with parallax.
@@ -145,7 +146,7 @@ export function LovePostcard({ mouse }) {
                     transition={{ type: "spring", stiffness: 90, damping: 18 }}
                   >
                     <div className="px-5 py-6 text-center sm:px-8 sm:py-8">
-                      <p className="font-display text-4xl text-love sm:text-5xl">For DONNN</p>
+                      <p className="font-display text-4xl text-love sm:text-5xl">For my Everthing</p>
                       <p className="mt-2 font-body text-sm italic text-love/70">With all my love — always.</p>
                       {phase === "opened" && (
                         <RippleButton
